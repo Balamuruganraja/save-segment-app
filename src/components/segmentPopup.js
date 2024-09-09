@@ -23,6 +23,7 @@ const SegmentPopup = ({ onClose }) => {
       setSelectedSchemas([...selectedSchemas, selected]);
       setAvailableSchemas(availableSchemas.filter((schema) => schema.value !== currentSchema));
       setCurrentSchema(''); // Reset dropdown
+      setSegmentName('')
     }
   };
 
