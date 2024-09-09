@@ -26,37 +26,43 @@ const SegmentPopup = ({ onClose }) => {
     }
   };
 
-  const handleSave = async () => {
+  const handleSave = () => {
     const dataToSend = {
       segment_name: segmentName,
       schema: selectedSchemas.map((schema) => ({
         [schema.value]: schema.label,
       })),
     };
-  
-    console.log(dataToSend, "Data to send");
-  
+
+    console.log('Data to send:', dataToSend); // Log the data being sent
+
     const webhookUrl = 'https://webhook.site/13a57817-b635-4375-834c-7944644782eb';
   
-    try {
-      const response = await axios.post(webhookUrl, dataToSend, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      
-  
+    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+
+      axios.options(proxyUrl + webhookUrl, dataToSend, {
+       headers: {
+        'Content-Type': 'application/json',
+       },
+     })
+
+    .then((response) => {
+      console.log('Response:', response); // Log the full response
+
       if (response.status === 200) {
         alert('Segment successfully saved and data sent to webhook!');
       } else {
+        console.error('Response status not 200:', response.status);
         alert('Failed to send data. Please try again.');
       }
-    } catch (error) {
-      console.error('Error sending data:', error);
-    }
+    })
+    .catch((error) => {
+      console.error('Error sending data:', error); // Log any error encountered
+    });
   
     onClose(); // Close popup after saving
-  };
+};
+
   
   
 
